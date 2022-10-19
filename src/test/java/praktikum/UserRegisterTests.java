@@ -3,6 +3,7 @@ package praktikum;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import praktikum.api.client.UserClient;
@@ -37,8 +38,6 @@ public class UserRegisterTests extends TestBase {
                 .statusCode(200)
                 .and()
                 .assertThat().body("success", is(true));
-
-        deleteUser();
     }
 
     @Test
@@ -57,8 +56,6 @@ public class UserRegisterTests extends TestBase {
                 .statusCode(403)
                 .and()
                 .assertThat().body("message", equalTo("User already exists"));
-
-        deleteUser();
     }
 
     @Test
@@ -100,7 +97,12 @@ public class UserRegisterTests extends TestBase {
                 .assertThat().body("message", equalTo("Email, password and name are required fields"));
     }
 
-    private void deleteUser() {
-        userClient.deleteUser(token);
+    @After
+    public void deleteUser() {
+        try {
+            userClient.deleteUser(token);
+        } catch (Exception exception) {
+            System.out.println("Ошибка  удаления пользователя. Пользователь не создавался.");
+        }
     }
 }

@@ -96,6 +96,10 @@ public class UserUpdateInformationTests extends TestBase {
 
     @After
     public void deleteUser() {
-        userClient.deleteUser(token);
+        try {
+            userClient.deleteUser(token);
+        } catch (Exception exception) {
+            System.out.println("Ошибка  удаления пользователя.");
+        }
     }
 }
